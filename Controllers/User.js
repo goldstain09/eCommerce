@@ -51,6 +51,28 @@ exports.verifyUser = async (req, res) => {
 };
 
 exports.loginUser = async (req, res) => {
+  const { userEmail, password } = req.body;
+  const user = await Users.findOne({ userEmail: userEmail });
+  if (user !== null) {
+    let token = jwt.sign({ email: userEmail }, privateKey, {
+      algorithm: "RS256",
+    });
+    if (bcrypt.compareSync(password, user.password)) {
+      res.json({
+        token: token,
+        userName: user.userName,
+        userEmail: user.userEmail,
+        orders: user.orders,
+        cart: user.cart,
+        authorise: true,
+      });
+    }else{
+        res.json({ authorise: false });
+    }
+  } else {
+    res.json({ authorise: false });
+  }
 
-    bcrypt.compareSync(myPlaintextPassword, hash);
+  // const token = req.get("Authorization").split("Bearer ")[1];
+  // bcrypt.compareSync(myPlaintextPassword, hash);
 };

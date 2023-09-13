@@ -3,6 +3,7 @@ const userRoute = express.Router();
 const userController = require('../Controllers/User');
 
 userRoute.post('/create', userController.createUser)
-.get('/verify',userController.verifyUser);
+.get('/verify',userController.verifyUser)
+.post('/login',userController.loginUser);
 
 exports.UserRoute = userRoute;
