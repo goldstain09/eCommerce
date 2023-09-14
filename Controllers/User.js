@@ -62,6 +62,8 @@ exports.loginUser = async (req, res) => {
         token: token,
         authorise: true,
       });
+      user.token = token;
+      await user.save();
     }else{
         res.json({ authorise: false });
     }
