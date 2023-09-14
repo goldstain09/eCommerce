@@ -60,10 +60,6 @@ exports.loginUser = async (req, res) => {
     if (bcrypt.compareSync(password, user.password)) {
       res.json({
         token: token,
-        userName: user.userName,
-        userEmail: user.userEmail,
-        orders: user.orders,
-        cart: user.cart,
         authorise: true,
       });
     }else{
