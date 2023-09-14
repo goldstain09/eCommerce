@@ -74,3 +74,59 @@ exports.loginUser = async (req, res) => {
   // const token = req.get("Authorization").split("Bearer ")[1];
   // bcrypt.compareSync(myPlaintextPassword, hash);
 };
+
+exports.editUser = async (req, res) => {
+  const { userEmail, password,  userName, token } = req.body;
+  try {
+    const decoded = jwt.verify(token,publicKey);
+    if(decoded.email){
+      const user = await Users.findOne({userEmail:decoded.email});
+      // console.log(user);
+      if(bcrypt.compareSync(password, user.password)){
+        let newEmailtoken = jwt.sign({ email: userEmail }, privateKey, {
+          algorithm: "RS256",
+        });
+        user.token = newEmailtoken;
+        user.userEmail = userEmail;
+        user.userName = userName;
+        await user.save();
+        res.json({
+          token:newEmailtoken,
+          authorise:true
+        });
+        console.log('asd');
+      }else{
+        res.json({authorise:false});
+      }
+    }
+  } catch (error) {
+    res.json({authorise:false});
+  }
+
+
+
+
+
+
+
+  // const user = await Users.findOne({ userEmail: userEmail });
+  // if (user !== null) {
+  //   let token = jwt.sign({ email: userEmail }, privateKey, {
+  //     algorithm: "RS256",
+  //   });
+  //   if (bcrypt.compareSync(password, user.password)) {
+  //     res.json({
+  //       token: token,
+  //       authorise: true,
+  //     });
+  //     user.token = token;
+  //     await user.save();
+  //   }else{
+  //       res.json({ authorise: false });
+  //   }
+  // } else {
+  //   res.json({ authorise: false });
+  // }
+  // res.json({'success':'treu'});
+
+};
