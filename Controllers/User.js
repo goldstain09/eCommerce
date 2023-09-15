@@ -46,7 +46,7 @@ exports.verifyUser = async (req, res) => {
       });
     }
   } catch (error) {
-    res.json({ authorise: false });
+    res.json({ authorise: false }).status(401);
   }
 };
 
