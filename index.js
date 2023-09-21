@@ -24,5 +24,3 @@ server.use('/user',userRoute.UserRoute);
 
 server.listen(8080);
 
-
-//YbJuMa2wjJ155fIY
