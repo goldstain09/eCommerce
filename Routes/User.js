@@ -7,4 +7,4 @@ userRoute.post('/create', userController.createUser)
 .post('/edit',userController.editUser)
 .post('/login',userController.loginUser);
 
-exports.UserRoute = userRoute;
+exports.Routes = userRoute;
