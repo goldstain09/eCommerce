@@ -42,6 +42,7 @@ exports.verifyUser = async (req, res) => {
         userEmail: user.userEmail,
         orders: user.orders,
         cart: user.cart,
+        id: user._id,
         authorise: true,
       });
     }
@@ -64,8 +65,8 @@ exports.loginUser = async (req, res) => {
       });
       user.token = token;
       await user.save();
-    }else{
-        res.json({ authorise: false });
+    } else {
+      res.json({ authorise: false });
     }
   } else {
     res.json({ authorise: false });
@@ -76,13 +77,13 @@ exports.loginUser = async (req, res) => {
 };
 
 exports.editUser = async (req, res) => {
-  const { userEmail, password,  userName, token } = req.body;
+  const { userEmail, password, userName, token } = req.body;
   try {
-    const decoded = jwt.verify(token,publicKey);
-    if(decoded.email){
-      const user = await Users.findOne({userEmail:decoded.email});
+    const decoded = jwt.verify(token, publicKey);
+    if (decoded.email) {
+      const user = await Users.findOne({ userEmail: decoded.email });
       // console.log(user);
-      if(bcrypt.compareSync(password, user.password)){
+      if (bcrypt.compareSync(password, user.password)) {
         let newEmailtoken = jwt.sign({ email: userEmail }, privateKey, {
           algorithm: "RS256",
         });
@@ -91,42 +92,79 @@ exports.editUser = async (req, res) => {
         user.userName = userName;
         await user.save();
         res.json({
-          token:newEmailtoken,
-          authorise:true
+          token: newEmailtoken,
+          authorise: true,
         });
-        console.log('asd');
-      }else{
-        res.json({authorise:false});
+        console.log("asd");
+      } else {
+        res.json({ authorise: false });
       }
     }
   } catch (error) {
-    res.json({authorise:false});
+    res.json({ authorise: false });
   }
-
-
-
-
-
-
-
-  // const user = await Users.findOne({ userEmail: userEmail });
-  // if (user !== null) {
-  //   let token = jwt.sign({ email: userEmail }, privateKey, {
-  //     algorithm: "RS256",
-  //   });
-  //   if (bcrypt.compareSync(password, user.password)) {
-  //     res.json({
-  //       token: token,
-  //       authorise: true,
-  //     });
-  //     user.token = token;
-  //     await user.save();
-  //   }else{
-  //       res.json({ authorise: false });
-  //   }
-  // } else {
-  //   res.json({ authorise: false });
-  // }
-  // res.json({'success':'treu'});
-
 };
+
+// user add to cart
+exports.addToCart = async (req, res) => {
+  const { userId, productId, quantity, userToken } = req.body;
+  try {
+    const decoded = jwt.verify(userToken, publicKey);
+    const user = await Users.findById(userId);
+    if (decoded.email === user.userEmail) {
+      if (user.cart.length > 0) {
+        if (user.cart.every((item) => item.productId !== productId)) {
+          user.cart.push({ productId: productId, quantity: quantity });
+          await user.save();
+          res.json({
+            userName: user.userName,
+            userEmail: user.userEmail,
+            orders: user.orders,
+            cart: user.cart,
+            id: user._id,
+            authorise: true,
+            added: true,
+          });
+        } else {
+          res.json({ added: false, alreadyInCart: true });
+        }
+      } else {
+        user.cart.push({ productId: productId, quantity: quantity });
+        await user.save();
+        res.json({
+          userName: user.userName,
+          userEmail: user.userEmail,
+          orders: user.orders,
+          cart: user.cart,
+          id: user._id,
+          authorise: true,
+          added: true,
+         });
+      }
+    }
+  } catch (error) {
+    res.json({ added: false, someOtherError: true });
+  }
+};
+
+// const user = await Users.findOne({ userEmail: userEmail });
+// if (user !== null) {
+//   let token = jwt.sign({ email: userEmail }, privateKey, {
+//     algorithm: "RS256",
+//   });
+//   if (bcrypt.compareSync(password, user.password)) {
+//     res.json({
+//       token: token,
+//       authorise: true,
+//     });
+//     user.token = token;
+//     await user.save();
+//   }else{
+//       res.json({ authorise: false });
+//   }
+// } else {
+//   res.json({ authorise: false });
+// }
+// res.json({'success':'treu'});
+
+// };

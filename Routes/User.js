@@ -5,6 +5,7 @@ const userController = require('../Controllers/User');
 userRoute.post('/create', userController.createUser)
 .get('/verify',userController.verifyUser)
 .post('/edit',userController.editUser)
-.post('/login',userController.loginUser);
+.post('/login',userController.loginUser)
+.post('/addtocart',userController.addToCart);
 
 exports.Routes = userRoute;
