@@ -147,6 +147,98 @@ exports.addToCart = async (req, res) => {
   }
 };
 
+exports.removeFromCart = async (req,res) => {
+  const {productId,token,userId} = req.body;
+  try {
+    const decoded = jwt.verify(token, publicKey);
+    const user = await Users.findById(userId);
+    if(decoded.email === user.userEmail){
+      const updatedCart = user.cart.filter((item) => item.productId !== productId);
+      const neew = await Users.findByIdAndUpdate(userId,{cart:updatedCart},{new:true})
+      console.log(neew);
+      res.json({
+        removed:true
+      });
+    }else{
+      res.json({
+        removed:false
+      });
+    }
+    
+  } catch (error) {
+    res.json({
+      removed:false,
+      someOtherError:true
+    })
+  }
+}
+
+
+exports.setQuantity = async (req,res) => {
+  const {userId,token,productId,newQuantity} = req.body;
+  try {
+    const decoded = jwt.verify(token, publicKey);
+    const user = await Users.findById(userId);
+    if(decoded.email === user.userEmail){
+      const userCart = user.cart;
+      const productThatShouldBeUpdate = userCart.filter((item)=>item.productId === productId)[0];
+      const productsThatShouldNotBeUpdate = userCart.filter((item)=>item.productId !== productId);
+      productThatShouldBeUpdate.quantity = newQuantity;
+      productsThatShouldNotBeUpdate.push(productThatShouldBeUpdate);
+      // user.cart = productsThatShouldNotBeUpdate;
+      // await user.updateOne({_id:userId},{$set:{cart:productsThatShouldNotBeUpdate}});
+      const neew = await Users.findByIdAndUpdate(userId,{cart:productsThatShouldNotBeUpdate},{new:true})
+      // await user.save();
+      // console.log(neew);
+      res.json({
+        quantityUpdated:true
+      });
+    }else{
+      res.json({
+        quantityUpdated:false
+      });
+    }
+  } catch (error) {
+    res.json({
+      quantityUpdated:false,
+      someOtherError:true
+    });
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // const user = await Users.findOne({ userEmail: userEmail });
 // if (user !== null) {
 //   let token = jwt.sign({ email: userEmail }, privateKey, {
