@@ -44,6 +44,7 @@ exports.verifyUser = async (req, res) => {
         cart: user.cart,
         id: user._id,
         authorise: true,
+        address:user.address
       });
     }
   } catch (error) {
@@ -95,7 +96,7 @@ exports.editUser = async (req, res) => {
           token: newEmailtoken,
           authorise: true,
         });
-        console.log("asd");
+        // console.log("asd");
       } else {
         res.json({ authorise: false });
       }
@@ -122,6 +123,7 @@ exports.addToCart = async (req, res) => {
             orders: user.orders,
             cart: user.cart,
             id: user._id,
+            address:user.address,
             authorise: true,
             added: true,
           });
@@ -137,6 +139,7 @@ exports.addToCart = async (req, res) => {
           orders: user.orders,
           cart: user.cart,
           id: user._id,
+          address:user.address,
           authorise: true,
           added: true,
          });
@@ -155,7 +158,7 @@ exports.removeFromCart = async (req,res) => {
     if(decoded.email === user.userEmail){
       const updatedCart = user.cart.filter((item) => item.productId !== productId);
       const neew = await Users.findByIdAndUpdate(userId,{cart:updatedCart},{new:true})
-      console.log(neew);
+      // console.log(neew);
       res.json({
         removed:true
       });
@@ -206,7 +209,28 @@ exports.setQuantity = async (req,res) => {
   }
 }
 
-
+exports.addAddress = async (req,res) => {
+  const {token,userId} = req.body.userDetails;
+  try {
+    const decoded = jwt.verify(token, publicKey);
+    const user = await Users.findById(userId);
+    if(decoded.email === user.userEmail){
+      const nnn = await Users.findByIdAndUpdate(userId,{$set:{address:req.body.userAddress}}, {new:true});
+      res.json({
+        addressAdded:true
+      })
+    }else{
+      res.json({
+        addressAdded:false
+      })
+    }
+  } catch (error) {
+    res.json({
+      addressAdded:false,
+      someOtherError:true
+    })
+  }
+}
 
 
 
