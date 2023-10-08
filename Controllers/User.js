@@ -1,4 +1,5 @@
-const model = require("../Model/User");
+const modelU = require("../Model/User");
+const modelS = require("../Model/Seller");
 const fs = require("fs");
 const path = require("path");
 const privateKey = fs.readFileSync(
@@ -9,7 +10,8 @@ const publicKey = fs.readFileSync(
   path.resolve(__dirname, "../public.key"),
   "utf-8"
 );
-const Users = model.Users;
+const Users = modelU.Users;
+const Sellers = modelS.Sellers;
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 
@@ -44,7 +46,7 @@ exports.verifyUser = async (req, res) => {
         cart: user.cart,
         id: user._id,
         authorise: true,
-        address:user.address
+        address: user.address,
       });
     }
   } catch (error) {
@@ -123,7 +125,7 @@ exports.addToCart = async (req, res) => {
             orders: user.orders,
             cart: user.cart,
             id: user._id,
-            address:user.address,
+            address: user.address,
             authorise: true,
             added: true,
           });
@@ -139,10 +141,10 @@ exports.addToCart = async (req, res) => {
           orders: user.orders,
           cart: user.cart,
           id: user._id,
-          address:user.address,
+          address: user.address,
           authorise: true,
           added: true,
-         });
+        });
       }
     }
   } catch (error) {
@@ -150,118 +152,127 @@ exports.addToCart = async (req, res) => {
   }
 };
 
-exports.removeFromCart = async (req,res) => {
-  const {productId,token,userId} = req.body;
+exports.removeFromCart = async (req, res) => {
+  const { productId, token, userId } = req.body;
   try {
     const decoded = jwt.verify(token, publicKey);
     const user = await Users.findById(userId);
-    if(decoded.email === user.userEmail){
-      const updatedCart = user.cart.filter((item) => item.productId !== productId);
-      const neew = await Users.findByIdAndUpdate(userId,{cart:updatedCart},{new:true})
+    if (decoded.email === user.userEmail) {
+      const updatedCart = user.cart.filter(
+        (item) => item.productId !== productId
+      );
+      const neew = await Users.findByIdAndUpdate(
+        userId,
+        { cart: updatedCart },
+        { new: true }
+      );
       // console.log(neew);
       res.json({
-        removed:true
+        removed: true,
       });
-    }else{
+    } else {
       res.json({
-        removed:false
+        removed: false,
       });
     }
-    
   } catch (error) {
     res.json({
-      removed:false,
-      someOtherError:true
-    })
+      removed: false,
+      someOtherError: true,
+    });
   }
-}
+};
 
-
-exports.setQuantity = async (req,res) => {
-  const {userId,token,productId,newQuantity} = req.body;
+exports.setQuantity = async (req, res) => {
+  const { userId, token, productId, newQuantity } = req.body;
   try {
     const decoded = jwt.verify(token, publicKey);
     const user = await Users.findById(userId);
-    if(decoded.email === user.userEmail){
+    if (decoded.email === user.userEmail) {
       const userCart = user.cart;
-      const productThatShouldBeUpdate = userCart.filter((item)=>item.productId === productId)[0];
-      const productsThatShouldNotBeUpdate = userCart.filter((item)=>item.productId !== productId);
+      const productThatShouldBeUpdate = userCart.filter(
+        (item) => item.productId === productId
+      )[0];
+      const productsThatShouldNotBeUpdate = userCart.filter(
+        (item) => item.productId !== productId
+      );
       productThatShouldBeUpdate.quantity = newQuantity;
       productsThatShouldNotBeUpdate.push(productThatShouldBeUpdate);
       // user.cart = productsThatShouldNotBeUpdate;
       // await user.updateOne({_id:userId},{$set:{cart:productsThatShouldNotBeUpdate}});
-      const neew = await Users.findByIdAndUpdate(userId,{cart:productsThatShouldNotBeUpdate},{new:true})
+      const neew = await Users.findByIdAndUpdate(
+        userId,
+        { cart: productsThatShouldNotBeUpdate },
+        { new: true }
+      );
       // await user.save();
       // console.log(neew);
       res.json({
-        quantityUpdated:true
+        quantityUpdated: true,
       });
-    }else{
+    } else {
       res.json({
-        quantityUpdated:false
+        quantityUpdated: false,
       });
     }
   } catch (error) {
     res.json({
-      quantityUpdated:false,
-      someOtherError:true
+      quantityUpdated: false,
+      someOtherError: true,
     });
   }
-}
+};
 
-exports.addAddress = async (req,res) => {
-  const {token,userId} = req.body.userDetails;
+exports.addAddress = async (req, res) => {
+  const { token, userId } = req.body.userDetails;
   try {
     const decoded = jwt.verify(token, publicKey);
     const user = await Users.findById(userId);
-    if(decoded.email === user.userEmail){
-      const nnn = await Users.findByIdAndUpdate(userId,{$set:{address:req.body.userAddress}}, {new:true});
+    if (decoded.email === user.userEmail) {
+      const nnn = await Users.findByIdAndUpdate(
+        userId,
+        { $set: { address: req.body.userAddress } },
+        { new: true }
+      );
       res.json({
-        addressAdded:true
-      })
-    }else{
+        addressAdded: true,
+      });
+    } else {
       res.json({
-        addressAdded:false
-      })
+        addressAdded: false,
+      });
     }
   } catch (error) {
     res.json({
-      addressAdded:false,
-      someOtherError:true
-    })
+      addressAdded: false,
+      someOtherError: true,
+    });
   }
-}
+};
 
+exports.placeOrder = async (req, res) => {
+  const { userId, token } = req.body.userDetails;
+  try {
+    const decoded = jwt.verify(token, publicKey);
+    const user = await Users.findById(userId);
+    const sellers = await Sellers.find();
+    if (decoded.email === user.userEmail) {
+      req.body.products.map((item) => {
+        // const seller = sellers.filter((it) => it._id.toString() === item.sellerId)[0];
+        // seller.openOrders.push({
+        //   orderedBy: userId,
+        //   userAddress: user.address,
+        //   productId: item._id,
+        //   quantity: item.quantity,
+        // });
+        // console.log(seller);
+        // const openOrders = [];
+        
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+      });
+    }
+  } catch (error) {}
+};
 
 // const user = await Users.findOne({ userEmail: userEmail });
 // if (user !== null) {
