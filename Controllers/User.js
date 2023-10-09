@@ -20,6 +20,8 @@ exports.createUser = async (req, res) => {
   let token = jwt.sign({ email: req.body.userEmail }, privateKey, {
     algorithm: "RS256",
   });
+  user.address = {};
+  console.log(user);
   user.token = token;
   const hash = bcrypt.hashSync(req.body.password, 10);
   user.password = hash;
@@ -257,21 +259,60 @@ exports.placeOrder = async (req, res) => {
     const user = await Users.findById(userId);
     const sellers = await Sellers.find();
     if (decoded.email === user.userEmail) {
-      req.body.products.map((item) => {
-        // const seller = sellers.filter((it) => it._id.toString() === item.sellerId)[0];
-        // seller.openOrders.push({
-        //   orderedBy: userId,
-        //   userAddress: user.address,
-        //   productId: item._id,
-        //   quantity: item.quantity,
-        // });
-        // console.log(seller);
-        // const openOrders = [];
-        
+      const ResponseSeller = req.body.products.map((item) => {
+        const seller = sellers.filter(
+          (it) => it._id.toString() === item.sellerId
+        )[0];
 
+        //order unique id is compulsory becoz if any user order a same product with same quantity
+        //then it's difficult to filter at time of updation when seller update the status of order
+        const timestamp = Date.now().toString();
+        const randomNum = Math.random().toString().slice(2, 8);
+
+        seller.openOrders.push({
+          orderedBy: {
+            userName: user.userName,
+            userEmail: user.userEmail,
+            userId: userId,
+          },
+          userAddress: user.address,
+          product: item,
+          quantity: item.quantity,
+          status: "Order Placed",
+          orderUniqueId: `${timestamp}-${randomNum}`,
+        });
+        item.status = "Order Placed";
+        item.orderUniqueId = `${timestamp}-${randomNum}`;
+        delete item.productRating;
+        delete item.productDescription;
+        delete item.productStock;
+        return seller;
+      });
+      for (let i = 0; i < ResponseSeller.length; i++) {
+        const element = ResponseSeller[i];
+        let updateddoc = await Sellers.findByIdAndUpdate(
+          element._id.toString(),
+          { $set: { openOrders: element.openOrders } },
+          { new: true }
+        );
+      }
+      user.orders.push(...req.body.products);
+      user.cart = [];
+      await user.save();
+      res.json({
+        orderPlaced: true,
+      });
+    } else {
+      res.json({
+        orderPlaced: false,
       });
     }
-  } catch (error) {}
+  } catch (error) {
+    res.json({
+      orderPlaced: false,
+      someOtherError: true,
+    });
+  }
 };
 
 // const user = await Users.findOne({ userEmail: userEmail });

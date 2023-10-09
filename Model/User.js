@@ -6,7 +6,7 @@ const userSchema = new mongoose.Schema({
     password:{type:String, required:true, minLength:8},
     cart:{type:[Object]},
     orders:{type:[Object]},
-    address:{type:Object},
+    address:{ type: Object, default: {} },
     token:String
 });
 
