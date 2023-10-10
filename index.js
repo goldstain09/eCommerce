@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const userRoute = require('./Routes/User');
 const productsRoute = require('./Routes/Products');
+const sellerRoute = require('./Routes/Seller');
 
 const server = express();
 console.log("server started");
@@ -19,7 +20,8 @@ async function main() {
 server.use(cors());
 server.use(express.json()); 
 server.use('/user',userRoute.Routes);
-server.use('/productsApi',productsRoute.Routes )
+server.use('/productsApi',productsRoute.Routes);
+server.use('/seller',sellerRoute.Routes);
 
 
 

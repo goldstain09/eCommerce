@@ -10,6 +10,7 @@ userRoute.post('/create', userController.createUser)
 .post('/removefromcart', userController.removeFromCart)
 .post('/cartproductquantityset',userController.setQuantity)
 .post('/addaddress',userController.addAddress)
-.post('/placeorder',userController.placeOrder);
+.post('/placeorder',userController.placeOrder)
+.post('/sellerShop',userController.getSellerShopData);
 
 exports.Routes = userRoute;

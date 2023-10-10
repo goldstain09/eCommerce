@@ -1,5 +1,6 @@
 const modelU = require("../Model/User");
 const modelS = require("../Model/Seller");
+const modelP = require("../Model/Products");
 const fs = require("fs");
 const path = require("path");
 const privateKey = fs.readFileSync(
@@ -12,6 +13,7 @@ const publicKey = fs.readFileSync(
 );
 const Users = modelU.Users;
 const Sellers = modelS.Sellers;
+const Products = modelP.Product;
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 
@@ -314,6 +316,49 @@ exports.placeOrder = async (req, res) => {
     });
   }
 };
+
+exports.getSellerShopData = async (req, res) => {
+  const sellerId = req.body.sellerId;
+  try {
+    const seller = await Sellers.findById(sellerId);
+    const sellerProducts = await Products.find({sellerId:sellerId});
+
+    if(seller && sellerProducts){
+      res.json({
+        sellerFound:true,
+        ShopName:seller.shopName,
+        Owner:seller.ownerName,
+        OwnerEmail:seller.sellerEmail,
+        sellerId:sellerId,
+        sellerProducts:sellerProducts,
+        sellerFollowers:seller.followers
+      });
+    }else{
+      res.json({
+        sellerFound:false
+      });
+    }
+  } catch (error) {
+    res.json({
+      sellerFound:false,
+      someOtherError:true
+    });
+  }
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // const user = await Users.findOne({ userEmail: userEmail });
 // if (user !== null) {
