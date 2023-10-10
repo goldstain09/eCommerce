@@ -51,6 +51,7 @@ exports.verifyUser = async (req, res) => {
         id: user._id,
         authorise: true,
         address: user.address,
+        followingSellers:user.followingSellers
       });
     }
   } catch (error) {
@@ -130,6 +131,7 @@ exports.addToCart = async (req, res) => {
             cart: user.cart,
             id: user._id,
             address: user.address,
+            followingSellers:user.followingSellers,
             authorise: true,
             added: true,
           });
@@ -146,6 +148,7 @@ exports.addToCart = async (req, res) => {
           cart: user.cart,
           id: user._id,
           address: user.address,
+          followingSellers:user.followingSellers,
           authorise: true,
           added: true,
         });

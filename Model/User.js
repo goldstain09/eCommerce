@@ -7,6 +7,7 @@ const userSchema = new mongoose.Schema({
     cart:{type:[Object]},
     orders:{type:[Object]},
     address:{ type: Object, default: {} },
+    followingSellers:{type:[Object]},
     token:String
 });
 

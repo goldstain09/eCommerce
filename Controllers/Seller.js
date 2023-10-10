@@ -22,14 +22,19 @@ exports.followSeller = async (req,res)=>{
             if(seller.followers.length>0){
                 if(seller.followers.every((item)=>item.userId !== userId)){
                     seller.followers.push({userName:userName,userId:userId});
+                    user.followingSellers.push({sellerId:sellerId});
                     await Sellers.findByIdAndUpdate(sellerId,{$set:{followers:seller.followers}});
+                    await Users.findByIdAndUpdate(userId,{$set:{followingSellers:user.followingSellers}});
                     res.json({
                         followed:true
                     });
+                    // yha pr merko ek kam or kranna hai ki user me ek array hai followedSellers  to usme bi seller id ye push krani hai agr phle s nhi hai isme to
                 }
             }else{
                 seller.followers.push({userName:userName,userId:userId});
+                user.followingSellers.push({sellerId:sellerId});
                 await Sellers.findByIdAndUpdate(sellerId,{$set:{followers:seller.followers}});
+                await Users.findByIdAndUpdate(userId,{$set:{followingSellers:user.followingSellers}});
                 res.json({
                     followed:true
                 });
