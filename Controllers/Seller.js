@@ -51,3 +51,32 @@ exports.followSeller = async (req,res)=>{
         });
     }
 }
+
+
+
+exports.unFollowSeller = async (req,res) => {
+    const {userId,userToken,sellerId} = req.body;
+    try {
+        const decoded = jwt.verify(userToken,publicKey);
+        const user = await Users.findById(userId);
+        const seller = await Sellers.findById(sellerId);
+        if(decoded.email === user.userEmail){
+            const sellerFollowersWithoutThisUser = seller.followers.filter((item)=>item.userId !== userId);
+            await Sellers.findByIdAndUpdate(sellerId,{$set:{followers:sellerFollowersWithoutThisUser}});
+            const UserFollowingWithoutThisSeller = user.followingSellers.filter((item)=>item.sellerId!==sellerId);
+            await Users.findByIdAndUpdate(userId,{$set:{followingSellers:UserFollowingWithoutThisSeller}});
+            res.json({
+                unfollowedSeller:true
+            });
+        }else{
+            res.json({
+                unfollowedSeller:false
+            });
+        }
+    } catch (error) {
+        res.json({
+            unfollowedSeller:false,
+            someOtherError:true
+        });
+    }
+}
