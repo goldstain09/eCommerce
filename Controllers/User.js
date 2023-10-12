@@ -23,7 +23,7 @@ exports.createUser = async (req, res) => {
     algorithm: "RS256",
   });
   user.address = {};
-  console.log(user);
+  // console.log(user);
   user.token = token;
   const hash = bcrypt.hashSync(req.body.password, 10);
   user.password = hash;

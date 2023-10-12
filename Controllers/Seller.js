@@ -22,7 +22,7 @@ exports.followSeller = async (req,res)=>{
             if(seller.followers.length>0){
                 if(seller.followers.every((item)=>item.userId !== userId)){
                     seller.followers.push({userName:userName,userId:userId});
-                    user.followingSellers.push({sellerId:sellerId});
+                    user.followingSellers.push({sellerId:sellerId,Shopname:seller.shopName});
                     await Sellers.findByIdAndUpdate(sellerId,{$set:{followers:seller.followers}});
                     await Users.findByIdAndUpdate(userId,{$set:{followingSellers:user.followingSellers}});
                     res.json({
@@ -32,7 +32,7 @@ exports.followSeller = async (req,res)=>{
                 }
             }else{
                 seller.followers.push({userName:userName,userId:userId});
-                user.followingSellers.push({sellerId:sellerId});
+                user.followingSellers.push({sellerId:sellerId,Shopname:seller.shopName});
                 await Sellers.findByIdAndUpdate(sellerId,{$set:{followers:seller.followers}});
                 await Users.findByIdAndUpdate(userId,{$set:{followingSellers:user.followingSellers}});
                 res.json({
