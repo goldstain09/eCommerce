@@ -51,7 +51,7 @@ exports.verifyUser = async (req, res) => {
         id: user._id,
         authorise: true,
         address: user.address,
-        followingSellers:user.followingSellers
+        followingSellers: user.followingSellers,
       });
     }
   } catch (error) {
@@ -131,7 +131,7 @@ exports.addToCart = async (req, res) => {
             cart: user.cart,
             id: user._id,
             address: user.address,
-            followingSellers:user.followingSellers,
+            followingSellers: user.followingSellers,
             authorise: true,
             added: true,
           });
@@ -148,7 +148,7 @@ exports.addToCart = async (req, res) => {
           cart: user.cart,
           id: user._id,
           address: user.address,
-          followingSellers:user.followingSellers,
+          followingSellers: user.followingSellers,
           authorise: true,
           added: true,
         });
@@ -176,6 +176,14 @@ exports.removeFromCart = async (req, res) => {
       // console.log(neew);
       res.json({
         removed: true,
+        userName: neew.userName,
+        userEmail: neew.userEmail,
+        orders: neew.orders,
+        cart: neew.cart,
+        id: neew._id,
+        authorise: true,
+        address: neew.address,
+        followingSellers: neew.followingSellers,
       });
     } else {
       res.json({
@@ -324,44 +332,30 @@ exports.getSellerShopData = async (req, res) => {
   const sellerId = req.body.sellerId;
   try {
     const seller = await Sellers.findById(sellerId);
-    const sellerProducts = await Products.find({sellerId:sellerId});
+    const sellerProducts = await Products.find({ sellerId: sellerId });
 
-    if(seller && sellerProducts){
+    if (seller && sellerProducts) {
       res.json({
-        sellerFound:true,
-        ShopName:seller.shopName,
-        Owner:seller.ownerName,
-        OwnerEmail:seller.sellerEmail,
-        sellerId:sellerId,
-        sellerProducts:sellerProducts,
-        sellerFollowers:seller.followers
+        sellerFound: true,
+        ShopName: seller.shopName,
+        Owner: seller.ownerName,
+        OwnerEmail: seller.sellerEmail,
+        sellerId: sellerId,
+        sellerProducts: sellerProducts,
+        sellerFollowers: seller.followers,
       });
-    }else{
+    } else {
       res.json({
-        sellerFound:false
+        sellerFound: false,
       });
     }
   } catch (error) {
     res.json({
-      sellerFound:false,
-      someOtherError:true
+      sellerFound: false,
+      someOtherError: true,
     });
   }
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // const user = await Users.findOne({ userEmail: userEmail });
 // if (user !== null) {
