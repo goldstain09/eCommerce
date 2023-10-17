@@ -224,6 +224,14 @@ exports.setQuantity = async (req, res) => {
       // console.log(neew);
       res.json({
         quantityUpdated: true,
+        userName: neew.userName,
+        userEmail: neew.userEmail,
+        orders: neew.orders,
+        cart: neew.cart,
+        id: neew._id,
+        authorise: true,
+        address: neew.address,
+        followingSellers: neew.followingSellers,
       });
     } else {
       res.json({
