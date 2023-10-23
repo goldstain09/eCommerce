@@ -1,6 +1,7 @@
 const express = require("express");
 const mongoose = require('mongoose');
 const cors = require('cors');
+const path = require('path');
 const userRoute = require('./Routes/User');
 const productsRoute = require('./Routes/Products');
 const sellerRoute = require('./Routes/Seller');
@@ -19,9 +20,13 @@ async function main() {
 
 server.use(cors());
 server.use(express.json()); 
+server.use(express.static('build'));
 server.use('/user',userRoute.Routes);
 server.use('/productsApi',productsRoute.Routes);
 server.use('/seller',sellerRoute.Routes);
+server.use('*',(req,res)=>{
+  res.sendFile(path.resolve(__dirname,'build', 'index.html'));
+})
 
 
 

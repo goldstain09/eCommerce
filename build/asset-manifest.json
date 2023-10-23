@@ -1,0 +1,37 @@
+{
+  "files": {
+    "main.css": "/static/css/main.c9042776.css",
+    "main.js": "/static/js/main.dacbaa7f.js",
+    "static/media/errorbg.jpg": "/static/media/errorbg.58aac7abdd8afc9ea9dd.jpg",
+    "static/media/homeMiddle2bg.jpg": "/static/media/homeMiddle2bg.6e7a10c7094bc96fd29a.jpg",
+    "static/media/home-top.jpg": "/static/media/home-top.2a1056e3022122468490.jpg",
+    "static/media/homeMiddle2a.jpg": "/static/media/homeMiddle2a.c5fad52518d634756197.jpg",
+    "static/media/homeMiddle1a.jpg": "/static/media/homeMiddle1a.6ea3cbf9e43baa364c3a.jpg",
+    "static/media/homeMiddle1b.jpg": "/static/media/homeMiddle1b.42070932da8b2ead64fe.jpg",
+    "static/media/homeMiddle1c.jpg": "/static/media/homeMiddle1c.f7fc05efbc4464fbb104.jpg",
+    "static/media/homeMiddle2b.jpg": "/static/media/homeMiddle2b.bcd497f5e540c9a75754.jpg",
+    "static/media/homeMiddle4bg.jpg": "/static/media/homeMiddle4bg.d638a90fe53474f075d0.jpg",
+    "static/media/homeMiddle3c.jpg": "/static/media/homeMiddle3c.b69cbeb72e23c9cede31.jpg",
+    "static/media/homeMiddle3a.jpg": "/static/media/homeMiddle3a.3bc1bdd52ef1978c31fe.jpg",
+    "static/media/cartPage.jpg": "/static/media/cartPage.30ee0939aa476ed755af.jpg",
+    "static/media/cartPagemob.jpg": "/static/media/cartPagemob.8cc19d65dcc9206714a2.jpg",
+    "static/media/cartPagemob2.jpg": "/static/media/cartPagemob2.bb0735d64f209442dd5a.jpg",
+    "static/media/search.png": "/static/media/search.be56216ee8a45d54ea5b.png",
+    "static/media/homeMiddle2c.jpg": "/static/media/homeMiddle2c.5df9e1166dfe401918fb.jpg",
+    "static/media/noOrders.jpg": "/static/media/noOrders.d979c986414e998e7164.jpg",
+    "static/media/noOrdersmob.jpg": "/static/media/noOrdersmob.8e04b55f09aadf8d7a30.jpg",
+    "static/media/homeMiddle3b.jpg": "/static/media/homeMiddle3b.cbe1a3187349f818efbd.jpg",
+    "static/media/noOrdersmob2.jpg": "/static/media/noOrdersmob2.53ab89575b8013d7324a.jpg",
+    "static/media/logo.png": "/static/media/logo.97e0d59ccceb10939d61.png",
+    "static/media/lowestprice.png": "/static/media/lowestprice.f4cdb5cdb2c6b88c9a19.png",
+    "static/media/shop.jpg": "/static/media/shop.b848a680ca99e35ac829.jpg",
+    "static/media/return.png": "/static/media/return.60b0df32792d0a7eee56.png",
+    "index.html": "/index.html",
+    "main.c9042776.css.map": "/static/css/main.c9042776.css.map",
+    "main.dacbaa7f.js.map": "/static/js/main.dacbaa7f.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.c9042776.css",
+    "static/js/main.dacbaa7f.js"
+  ]
+}
