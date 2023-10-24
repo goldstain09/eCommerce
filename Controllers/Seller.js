@@ -2,13 +2,15 @@ const modelU = require("../Model/User");
 const modelS = require("../Model/Seller");
 const Users = modelU.Users;
 const Sellers = modelS.Sellers;
-const fs = require("fs");
-const path = require("path");
+// const fs = require("fs");
+// const path = require("path");
+// const publicKey = fs.readFileSync(
+//   path.resolve(__dirname, "../public.key"),
+//   "utf-8"
+// );
+require('dotenv').config();
+const publicKey = process.env.PUBLIC_KEY;
 
-const publicKey = fs.readFileSync(
-  path.resolve(__dirname, "../public.key"),
-  "utf-8"
-);
 const jwt = require("jsonwebtoken");
 
 

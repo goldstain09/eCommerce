@@ -1,16 +1,22 @@
 const modelU = require("../Model/User");
 const modelS = require("../Model/Seller");
 const modelP = require("../Model/Products");
-const fs = require("fs");
-const path = require("path");
-const privateKey = fs.readFileSync(
-  path.resolve(__dirname, "../private.key"),
-  "utf-8"
-);
-const publicKey = fs.readFileSync(
-  path.resolve(__dirname, "../public.key"),
-  "utf-8"
-);
+// const fs = require("fs");
+// const path = require("path");
+// const privateKey = fs.readFileSync(
+//   path.resolve(__dirname, "../private.key"),
+//   "utf-8"
+// );
+// const publicKey = fs.readFileSync(
+//   path.resolve(__dirname, "../public.key"),
+//   "utf-8"
+// );
+require('dotenv').config();
+const publicKey = process.env.PUBLIC_KEY;
+const privateKey = process.env.PRIVATE_KEY;
+
+
+
 const Users = modelU.Users;
 const Sellers = modelS.Sellers;
 const Products = modelP.Product;
