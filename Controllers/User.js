@@ -11,11 +11,9 @@ const modelP = require("../Model/Products");
 //   path.resolve(__dirname, "../public.key"),
 //   "utf-8"
 // );
-require('dotenv').config();
+require("dotenv").config();
 const publicKey = process.env.PUBLIC_KEY;
 const privateKey = process.env.PRIVATE_KEY;
-
-
 
 const Users = modelU.Users;
 const Sellers = modelS.Sellers;
@@ -35,7 +33,18 @@ exports.createUser = async (req, res) => {
   user.password = hash;
   try {
     const createdUser = await user.save();
-    res.json({ token: createdUser.token });
+    res.json({
+      token: createdUser.token,
+      userName: user.userName,
+      userEmail: user.userEmail,
+      orders: user.orders,
+      cart: user.cart,
+      id: user._id,
+      authorise: true,
+      address: user.address,
+      followingSellers: user.followingSellers,
+      accountCreated: true,
+    });
   } catch (error) {
     res.json(error);
   }
@@ -58,6 +67,7 @@ exports.verifyUser = async (req, res) => {
         authorise: true,
         address: user.address,
         followingSellers: user.followingSellers,
+        verifieddANDLoggedIn: true,
       });
     }
   } catch (error) {
@@ -76,6 +86,14 @@ exports.loginUser = async (req, res) => {
       res.json({
         token: token,
         authorise: true,
+        userName: user.userName,
+        userEmail: user.userEmail,
+        orders: user.orders,
+        cart: user.cart,
+        id: user._id,
+        address: user.address,
+        followingSellers: user.followingSellers,
+        LoggedIn: true,
       });
       user.token = token;
       await user.save();
@@ -105,11 +123,18 @@ exports.editUser = async (req, res) => {
         user.userEmail = userEmail;
         user.userName = userName;
         await user.save();
+        console.log(user);
         res.json({
           token: newEmailtoken,
           authorise: true,
+          userName: user.userName,
+          userEmail: user.userEmail,
+          orders: user.orders,
+          cart: user.cart,
+          id: user._id,
+          address: user.address,
+          followingSellers: user.followingSellers,
         });
-        // console.log("asd");
       } else {
         res.json({ authorise: false });
       }
