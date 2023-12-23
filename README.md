@@ -1,5 +1,18 @@
 Project Name - "ECOMMERCE"
 
+
+Live Demo - https://ecommerce-project-yy9l.onrender.com/
+
+Test Users OR Seller - [
+    Email - demouser333@gmail.com
+    Password - sujal2004
+
+    Email - smraj@gmail.com
+    Password - sujal2004
+]
+
+
+
 Frontend (ReactJS):
 
 Description:
